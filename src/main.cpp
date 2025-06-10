@@ -75,6 +75,11 @@ int main(int argc, const char* argv[])
 
                 runescript.constants[name] = constant;
             }
+            if (macro.find("include ") == 0)
+            {
+                std::string file = macro.substr(7);
+                //TODO
+            }
             continue;
         }
 
