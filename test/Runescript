@@ -1,10 +1,8 @@
-spell "clean" {
-    !echo "Test: ${test}"
-    ! echo "Worked"
-
-    cast Hi
+spell main {
+    cast func firstArg = Worked!,secondArg=123
 }
 
-spell "Hi" {
-    !echo "Hello World from Hi!"
+spell func {
+    $echo "first argument: ${firstArg}"
+    $echo "second argument: ${secondArg}"
 }

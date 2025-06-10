@@ -11,9 +11,14 @@ struct Command {
     std::string command;
 };
 
+struct Variable {
+    std::string value;
+};
+
 struct Spell {
     std::string name;
     std::vector<Command> commands;
+    std::unordered_map<std::string, Variable> variables;
 };
 
 struct Runescript {

@@ -35,3 +35,15 @@ std::string parseString(const std::string& s)
 
     return result;
 }
+
+std::vector<std::string> split(std::string str, char delimiter)
+{
+  // Using str in a string stream
+    std::stringstream ss(str);
+    std::vector<std::string> res;
+    std::string token;
+    while (std::getline(ss, token, delimiter)) {
+        res.push_back(token);
+    }
+    return res;
+}
