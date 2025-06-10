@@ -1,9 +1,15 @@
 #include "config.rune"
 
-spell main {
+spell all {
+    cast compileFiles
+    cast run
+}
+
+spell compileFiles {
     $mkdir ${BUILD_DIR}
 
     cast compile SRC=${SRC_DIR}/test.c, OUT=${BUILD_DIR}/test
+
 
     $chmod +x ${BUILD_DIR}/test
 }
@@ -14,4 +20,8 @@ spell compile {
 
 spell clean {
     $rm -rf ${BUILD_DIR}
+}
+
+spell run {
+    $${BUILD_DIR}/test
 }

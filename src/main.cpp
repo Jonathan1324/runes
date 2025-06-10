@@ -64,8 +64,7 @@ int main(int argc, const char* argv[])
 
     if (casts.empty())
     {
-        std::cout << "No spell specified. Usage: runes cast <spell>" << std::endl;
-        return 0;
+        casts.push_back("all");
     }
 
     for (size_t i = 0; i < casts.size(); i++)
