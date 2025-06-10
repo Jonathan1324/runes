@@ -1,10 +1,13 @@
-#define e = echo
 #include "old.rune"
+
+#define e = echo
 
 spell main {
     cast func firstArg = Worked!,secondArg=123
 
     !${e} "Hi"
+
+    cast test
 }
 
 spell func {

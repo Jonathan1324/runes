@@ -54,6 +54,16 @@ Runescript parseRunescript(std::ifstream& file)
                     //TODO
                 }
 
+                Runescript includeRunescript = parseRunescript(file);
+
+                for (const auto& constant : includeRunescript.constants)
+                    runescript.constants[constant.first] = constant.second;
+
+                for (const auto& spell : includeRunescript.spells)
+                {
+                    runescript.spells[spell.first] = spell.second;
+                }
+
                 file.close();
             }
             continue;
@@ -62,7 +72,9 @@ Runescript parseRunescript(std::ifstream& file)
         std::cerr << "Unhandled line \"" << line << '\"' << std::endl;
     }
 
-    runescript.spells = mapSpells(spells);
+    std::unordered_map<std::string, Spell> newSpells = mapSpells(spells);
+    for (const auto& spell : newSpells)
+        runescript.spells[spell.first] = spell.second;
 
     return runescript;
 }

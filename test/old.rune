@@ -1,8 +1,8 @@
-spell clean {
+spell test {
     $echo "Test: Hi"
     $ echo "Worked"
 
-    cast Hi
+    cast "Hi"
 }
 
 spell "Hi" {
@@ -11,6 +11,4 @@ spell "Hi" {
     testVar = 0x93
 
     $echo "t: ${testVar}"
-
-    $echo "t: ${unknown}"
 }
