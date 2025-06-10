@@ -7,6 +7,11 @@
 #include <unordered_map>
 #include <optional>
 
+struct Constant {
+    std::string value;
+};
+
+
 struct Command {
     std::string command;
 };
@@ -25,5 +30,5 @@ struct Spell {
 
 Spell parseSpell(std::ifstream& file, const std::string& header);
 std::unordered_map<std::string, Spell> mapSpells(const std::vector<Spell>& spells);
-std::optional<Spell> seekSpell(Runescript *runescript, const std::string& name);
-void castSpell(Runescript runescript, Spell spell);
+std::optional<Spell> seekSpell(std::unordered_map<std::string, Spell> spells, const std::string& name);
+void castSpell(std::unordered_map<std::string, Spell> spells, std::unordered_map<std::string, Constant> constants, Spell spell);

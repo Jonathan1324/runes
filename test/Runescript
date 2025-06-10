@@ -1,4 +1,5 @@
 #define e = echo
+#include "old.rune"
 
 spell main {
     cast func firstArg = Worked!,secondArg=123
