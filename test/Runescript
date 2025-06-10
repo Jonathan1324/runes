@@ -1,10 +1,17 @@
 #include "config.rune"
 
-#define SRC = test.c
-#define BUILD_DIR = build
-
 spell main {
     $mkdir ${BUILD_DIR}
-    $${CC} ${CFLAGS} ${SRC} -o ${BUILD_DIR}/test
+
+    cast compile SRC=${SRC_DIR}/test.c, OUT=${BUILD_DIR}/test
+
     $chmod +x ${BUILD_DIR}/test
+}
+
+spell compile {
+    $${CC} ${CFLAGS} ${SRC} -o ${OUT}
+}
+
+spell clean {
+    $rm -rf ${BUILD_DIR}
 }

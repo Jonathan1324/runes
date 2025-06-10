@@ -77,7 +77,7 @@ void castSpell(std::unordered_map<std::string, Spell> spells, std::unordered_map
                     j++;
                     if (trimmed[j] == '$')
                     {
-                        cmd += trimmed;
+                        cmd += trimmed[j];
                         continue;
                     }
                     else if (trimmed[j] == '{')
@@ -121,7 +121,7 @@ void castSpell(std::unordered_map<std::string, Spell> spells, std::unordered_map
                     j++;
                     if (trimmed[j] == '$')
                     {
-                        cmd += trimmed;
+                        cmd += trimmed[j];
                         continue;
                     }
                     else if (trimmed[j] == '{')
@@ -194,18 +194,51 @@ void castSpell(std::unordered_map<std::string, Spell> spells, std::unordered_map
                         }
                         else
                         {
-                            argument = trim(arguments.substr(j, next - 1));
+                            argument = trim(arguments.substr(j, next));
                             j = next;
                         }
 
                         size_t equal = argument.find("=");
-                        if (equal == std::string::npos)
-                        {
-                            continue;
-                        }
-                        
                         std::string name = trim(argument.substr(0, equal));
-                        std::string value = trim(argument.substr(equal + 1));
+                        std::string trimmed = trim(argument.substr(equal + 1));
+ 
+                        std::string value;
+                        for (size_t j = 0; j < trimmed.size(); j++)
+                        {
+                            if (trimmed[j] == '$')
+                            {
+                                j++;
+                                if (trimmed[j] == '$')
+                                {
+                                    value += trimmed[j];
+                                    continue;
+                                }
+                                else if (trimmed[j] == '{')
+                                {
+                                    j++;
+                                    std::string identifier;
+                                    while (trimmed[j] != '}' || j >= trimmed.size())
+                                    {
+                                        identifier += trimmed[j];
+                                        j++;
+                                    }
+                                    
+                                    auto it = (*spell).variables.find(identifier);
+                                    if (it != (*spell).variables.end())
+                                        value += it->second.value;
+                                    else
+                                    {
+                                        auto it2 = constants.find(identifier);
+                                        if (it2 != constants.end())
+                                            value += it2->second.value;
+                                        else
+                                            std::cerr << "Unknown variable: " << identifier << std::endl;
+                                    }
+                                    continue;
+                                }
+                            }
+                            value += trimmed[j];
+                        }
 
                         Variable var;
                         var.value = value;
@@ -220,8 +253,46 @@ void castSpell(std::unordered_map<std::string, Spell> spells, std::unordered_map
         else if (command.command.find("=") != std::string::npos)
         {
             size_t equal = command.command.find("=");
-            std::string name = trim(command.command.substr(0, equal - 1));
-            std::string value = trim(command.command.substr(equal + 1));
+            std::string name = trim(command.command.substr(0, equal));
+            std::string trimmed = trim(command.command.substr(equal + 1));
+
+            std::string value;
+            for (size_t j = 0; j < trimmed.size(); j++)
+            {
+                if (trimmed[j] == '$')
+                {
+                    j++;
+                    if (trimmed[j] == '$')
+                    {
+                        value += trimmed[j];
+                        continue;
+                    }
+                    else if (trimmed[j] == '{')
+                    {
+                        j++;
+                        std::string identifier;
+                        while (trimmed[j] != '}' || j >= trimmed.size())
+                        {
+                            identifier += trimmed[j];
+                            j++;
+                        }
+
+                        auto it = spell.variables.find(identifier);
+                        if (it != spell.variables.end())
+                            value += it->second.value;
+                        else
+                        {
+                            auto it2 = constants.find(identifier);
+                            if (it2 != constants.end())
+                                value += it2->second.value;
+                            else
+                                std::cerr << "Unknown variable: " << identifier << std::endl;
+                        }
+                        continue;
+                    }
+                }
+                value += trimmed[j];
+            }
 
             Variable var;
             var.value = value;

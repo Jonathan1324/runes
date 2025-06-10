@@ -4,5 +4,5 @@
 
 int shell(std::string cmd)
 {
-    return std::system(cmd.c_str());
+    return std::system((cmd).c_str());
 }
