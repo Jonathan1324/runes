@@ -1,4 +1,4 @@
-#include "old.rune"
+#include "config.rune"
 
 #define e = echo
 
