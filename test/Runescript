@@ -1,0 +1,10 @@
+spell "clean" {
+    !echo "Test: ${test}"
+    ! echo "Worked"
+
+    cast Hi
+}
+
+spell "Hi" {
+    !echo "Hello World from Hi!"
+}
