@@ -1,12 +1,11 @@
-#define e = echo
+#define CC = gcc
+#define CFLAGS = 
+
+#define SRC = test.c
+#define BUILD_DIR = build
 
 spell main {
-    cast func firstArg = Worked!,secondArg=123
-
-    !${e} "Hi"
-}
-
-spell func {
-    $echo "first argument: ${firstArg}"
-    $echo "second argument: ${secondArg}"
+    $mkdir ${BUILD_DIR}
+    $${CC} ${CFLAGS} ${SRC} -o ${BUILD_DIR}/test
+    $chmod +x ${BUILD_DIR}/test
 }
