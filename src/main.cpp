@@ -28,7 +28,7 @@ int main(int argc, const char* argv[])
 
     if (!found)
     {
-        std::cerr << "Didn't fine \"" << filename_to_find << "\".\n";
+        std::cerr << "Didn't find \"" << filename_to_find << "\".\n";
         return 1;
     }
 
@@ -42,6 +42,10 @@ int main(int argc, const char* argv[])
 
     std::vector<Spell> spells;
 
+
+    Runescript runescript;
+
+
     // read lines
     std::string line;
     while (std::getline(infile, line))
@@ -50,10 +54,27 @@ int main(int argc, const char* argv[])
 
         if (line.empty()) continue;
 
-        if (line.find("spell") == 0)
+        if (line.find("spell ") == 0)
         {
-            Spell spell = parseSpell(infile, trim(line.substr(5)));
+            Spell spell = parseSpell(infile, trim(line.substr(6)));
             spells.push_back(spell);
+            continue;
+        }
+        else if (line.find("#") == 0)
+        {
+            std::string macro = line.substr(1);
+            if (macro.find("define ") == 0)
+            {
+                std::string definition = macro.substr(7);
+                size_t equal = definition.find("=");
+                std::string name = trim(definition.substr(0, equal - 1));
+                std::string value = trim(definition.substr(equal + 1));
+
+                Constant constant;
+                constant.value = value;
+
+                runescript.constants[name] = constant;
+            }
             continue;
         }
 
@@ -61,8 +82,6 @@ int main(int argc, const char* argv[])
     }
 
     infile.close();
-
-    Runescript runescript;
 
     runescript.spells = mapSpells(spells);
 

@@ -94,7 +94,13 @@ void castSpell(Runescript runescript, Spell spell)
                         if (it != spell.variables.end())
                             cmd += it->second.value;
                         else
-                            std::cerr << "Unknown variable: " << identifier << std::endl;
+                        {
+                            auto it2 = runescript.constants.find(identifier);
+                            if (it2 != runescript.constants.end())
+                                cmd += it2->second.value;
+                            else
+                                std::cerr << "Unknown variable: " << identifier << std::endl;
+                        }
                     }
                 }
                 cmd += trimmed[j];
@@ -132,7 +138,13 @@ void castSpell(Runescript runescript, Spell spell)
                         if (it != spell.variables.end())
                             cmd += it->second.value;
                         else
-                            std::cerr << "Unknown variable: " << identifier << std::endl;
+                        {
+                            auto it2 = runescript.constants.find(identifier);
+                            if (it2 != runescript.constants.end())
+                                cmd += it2->second.value;
+                            else
+                                std::cerr << "Unknown variable: " << identifier << std::endl;
+                        }
                     }
                 }
                 cmd += trimmed[j];

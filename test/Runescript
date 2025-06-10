@@ -1,5 +1,9 @@
+#define e = echo
+
 spell main {
     cast func firstArg = Worked!,secondArg=123
+
+    !${e} "Hi"
 }
 
 spell func {

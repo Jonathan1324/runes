@@ -21,9 +21,7 @@ struct Spell {
     std::unordered_map<std::string, Variable> variables;
 };
 
-struct Runescript {
-    std::unordered_map<std::string, Spell> spells;
-};
+#include "runescript.hpp"
 
 Spell parseSpell(std::ifstream& file, const std::string& header);
 std::unordered_map<std::string, Spell> mapSpells(const std::vector<Spell>& spells);
