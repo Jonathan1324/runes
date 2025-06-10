@@ -5,6 +5,7 @@
 
 #include "spell.hpp"
 #include "util/trim.hpp"
+#include "util/string.hpp"
 
 namespace fs = std::filesystem;
 
@@ -40,70 +41,9 @@ int main(int argc, const char* argv[])
         return 1;
     }
 
-    std::vector<Spell> spells;
-
-
-    Runescript runescript;
-
-
-    // read lines
-    std::string line;
-    while (std::getline(infile, line))
-    {
-        line = trim(line);
-
-        if (line.empty()) continue;
-
-        if (line.find("spell ") == 0)
-        {
-            Spell spell = parseSpell(infile, trim(line.substr(6)));
-            spells.push_back(spell);
-            continue;
-        }
-        else if (line.find("#") == 0)
-        {
-            std::string macro = line.substr(1);
-            if (macro.find("define ") == 0)
-            {
-                std::string definition = macro.substr(7);
-                size_t equal = definition.find("=");
-                std::string name = trim(definition.substr(0, equal - 1));
-                std::string value = trim(definition.substr(equal + 1));
-
-                Constant constant;
-                constant.value = value;
-
-                runescript.constants[name] = constant;
-            }
-            if (macro.find("include ") == 0)
-            {
-                std::string file = macro.substr(7);
-                //TODO
-            }
-            continue;
-        }
-
-        std::cout << "Unhandled line \"" << line << '\"' << std::endl;
-    }
+    Runescript runescript = parseRunescript(infile);
 
     infile.close();
-
-    runescript.spells = mapSpells(spells);
-
-    //TODO: debug print spells
-    for (size_t i = 0; i < spells.size(); i++)
-    {
-        Spell spell = spells[i];
-
-        std::cout << "Spell: " << spell.name << '\n';
-
-        for (size_t j = 0; j < spell.commands.size(); j++)
-        {
-            std::cout << "\tCommand: " << spell.commands[j].command << '\n';
-        }
-
-        std::cout << std::endl;
-    }
 
     //TODO: I don't like this way
     std::vector<std::string> casts;
@@ -130,9 +70,9 @@ int main(int argc, const char* argv[])
 
     for (size_t i = 0; i < casts.size(); i++)
     {
-        auto spell = seekSpell(&runescript, casts[i]);
+        auto spell = seekSpell(runescript.spells, casts[i]);
         if (spell)
-            castSpell(runescript, *spell);
+            castSpell(runescript.spells, runescript.constants, *spell);
         else
             std::cerr << "Couldn't find spell '" << casts[i] << "'" << std::endl;
     }

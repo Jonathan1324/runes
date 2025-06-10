@@ -53,15 +53,15 @@ std::unordered_map<std::string, Spell> mapSpells(const std::vector<Spell>& spell
     return map;
 }
 
-std::optional<Spell> seekSpell(Runescript *runescript, const std::string& name)
+std::optional<Spell> seekSpell(std::unordered_map<std::string, Spell> spells, const std::string& name)
 {
-    auto it = runescript->spells.find(name);
-    if (it != runescript->spells.end())
+    auto it = spells.find(name);
+    if (it != spells.end())
         return it->second;
     return std::nullopt;
 }
 
-void castSpell(Runescript runescript, Spell spell)
+void castSpell(std::unordered_map<std::string, Spell> spells, std::unordered_map<std::string, Constant> constants, Spell spell)
 {
     for (size_t i = 0; i < spell.commands.size(); i++)
     {
@@ -95,8 +95,8 @@ void castSpell(Runescript runescript, Spell spell)
                             cmd += it->second.value;
                         else
                         {
-                            auto it2 = runescript.constants.find(identifier);
-                            if (it2 != runescript.constants.end())
+                            auto it2 = constants.find(identifier);
+                            if (it2 != constants.end())
                                 cmd += it2->second.value;
                             else
                                 std::cerr << "Unknown variable: " << identifier << std::endl;
@@ -139,8 +139,8 @@ void castSpell(Runescript runescript, Spell spell)
                             cmd += it->second.value;
                         else
                         {
-                            auto it2 = runescript.constants.find(identifier);
-                            if (it2 != runescript.constants.end())
+                            auto it2 = constants.find(identifier);
+                            if (it2 != constants.end())
                                 cmd += it2->second.value;
                             else
                                 std::cerr << "Unknown variable: " << identifier << std::endl;
@@ -174,7 +174,7 @@ void castSpell(Runescript runescript, Spell spell)
 
             std::string arguments = trim(args.substr(cast.size()));
 
-            auto spell = seekSpell(&runescript, cast);
+            auto spell = seekSpell(spells, cast);
             if (!spell)
             {
                 std::cerr << "Couldn't find spell '" << cast << "'" << std::endl;
@@ -213,7 +213,7 @@ void castSpell(Runescript runescript, Spell spell)
                         (*spell).variables[name] = var;
                     }
                 }
-                castSpell(runescript, *spell);
+                castSpell(spells, constants, *spell);
             }
         }
 

@@ -1,5 +1,4 @@
-#define CC = gcc
-#define CFLAGS = 
+#include "config.rune"
 
 #define SRC = test.c
 #define BUILD_DIR = build

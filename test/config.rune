@@ -1,0 +1,5 @@
+#define CC = gcc
+#define CFLAGS = 
+
+#define SRC_DIR = src
+#define BUILD_DIR = build
